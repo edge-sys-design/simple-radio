@@ -1,0 +1,38 @@
+/** Copyright (C) 2012 Edge System Design, LLC.  All rights reserved.
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  *
+  * Author(s): Ricky Elrod <relrod@edgesysdesign.com>
+  */
+
+package com.edgesysdesign.simpleradio.tests
+
+import com.edgesysdesign.simpleradio._
+import junit.framework.Assert._
+import _root_.android.test.AndroidTestCase
+import _root_.android.test.ActivityInstrumentationTestCase2
+
+class AndroidTests extends AndroidTestCase {
+  def testPackageIsCorrect() {
+    assertEquals("com.edgesysdesign.simpleradio", getContext.getPackageName)
+  }
+}
+
+class ActivityTests extends ActivityInstrumentationTestCase2(classOf[MainActivity]) {
+   def testHelloWorldIsShown() {
+      val activity = getActivity
+      val textview = activity.findView(TR.textview)
+      assertEquals(textview.getText, "hello, world!")
+    }
+}
