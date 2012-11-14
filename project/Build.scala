@@ -9,11 +9,14 @@ object General {
     version := "0.1",
     versionCode := 0,
     scalaVersion := "2.9.2",
-    platformName in Android := "android-14"
+    platformName in Android := "android-14",
+    javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
+    scalacOptions ++= Seq("-deprecation")
   )
 
   val proguardSettings = Seq (
-    useProguard in Android := true
+    useProguard in Android := true,
+    proguardOption in Android := "-keep class scala.Function1"
   )
 
   lazy val fullAndroidSettings =
