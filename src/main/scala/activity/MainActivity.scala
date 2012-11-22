@@ -20,12 +20,40 @@ package com.edgesysdesign.simpleradio
 
 import _root_.android.app.Activity
 import _root_.android.os.Bundle
+import _root_.android.view.{Menu, MenuItem}
+import _root_.android.content.Intent
+import _root_.android.widget.Toast
 
 class MainActivity extends Activity with TypedActivity {
   override def onCreate(bundle: Bundle) {
     super.onCreate(bundle)
     setContentView(R.layout.main)
-
     findView(TR.textview).setText("hello, world!")
+  }
+
+  override def onCreateOptionsMenu(menu: Menu): Boolean = {
+    val inflater = getMenuInflater()
+    inflater.inflate(R.menu.test_menu, menu)
+    true
+  }
+
+  def onCreateMemoryClick(item: MenuItem) {
+    val toast = Toast.makeText(
+      this,
+      "NYAN NYAN NYAN NYAN NYAN-NYAN NYAN NYAN",
+      Toast.LENGTH_SHORT)
+    toast.show()
+  }
+
+  /** Delegate to an 'about' activity.
+    *
+    * This is bad, these should be one function with a pattern match.
+    * But this works for experimenting. So meh.
+    *
+    * @todo Fix above.
+    */
+  def onAboutClick(item: MenuItem) {
+    val intent = new Intent(this, classOf[AboutActivity])
+    startActivity(intent)
   }
 }

@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Simple Radio</string>
+    <string name="version">1.0.0-extremely-alpha-and-terrible</string>
+    <string name="memories">Memories</string>
+    <string name="create_new">Create New</string>
+    <string name="recall">Recall</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="about">About</string>
+
+    <!-- Legal -->
+    <string name="copyright">
+      © 2012 Edge System Design, LLC. and others.
+    </string>
+    <string name="disclaimer">
+      Simple Radio is Free and Open Source Software and is released under the
+      terms of the GNU General Public License version 2 (or, at your option, any
+      later version) (GPLv2+).
+    </string>
+    <string name="get_involved">
+      Does this project interest you? Get involved! Check out the source code
+      at https://github.com/edge-sys-design/simple-radio/. We look forward to
+      working with you.
+    </string>
 </resources>
