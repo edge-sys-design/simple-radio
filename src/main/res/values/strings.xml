@@ -7,6 +7,11 @@
     <string name="main_menu">Main Menu</string>
     <string name="about">About</string>
 
+    <!-- Radio UI -->
+    <string name="frequency">Frequency</string>
+    <string name="pl_tone">PL Tone</string>
+    <string name="offset">Offset</string>
+
     <!-- Legal -->
     <string name="copyright">
       © 2012 Edge System Design, LLC. and others.

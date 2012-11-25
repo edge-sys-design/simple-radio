@@ -20,15 +20,19 @@ package com.edgesysdesign.simpleradio
 
 import _root_.android.app.Activity
 import _root_.android.os.Bundle
-import _root_.android.view.{Menu, MenuItem}
+import _root_.android.view.{Menu, MenuItem, View}
+import _root_.android.view.View.OnFocusChangeListener
 import _root_.android.content.Intent
 import _root_.android.widget.Toast
+import _root_.android.text.{TextWatcher, Editable}
 
 class MainActivity extends Activity with TypedActivity {
   override def onCreate(bundle: Bundle) {
     super.onCreate(bundle)
-    setContentView(R.layout.main)
-    findView(TR.textview).setText("hello, world!")
+    setContentView(R.layout.receive)
+    findView(TR.frequency).setText("145.170")
+    findView(TR.pl_tone).setText("123.0 Hz")
+    findView(TR.offset).setText("-600 KHz")
   }
 
   override def onCreateOptionsMenu(menu: Menu): Boolean = {

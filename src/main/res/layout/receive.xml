@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:padding="16dp">
+
+  <EditText android:id="@+id/frequency"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/frequency"
+            android:textSize="50sp"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal" />
+
+  <EditText android:id="@+id/offset"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/frequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/offset"
+            android:inputType="numberDecimal" />
+
+  <EditText android:id="@+id/pl_tone"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/frequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/pl_tone"
+            android:inputType="numberDecimal"
+            android:layout_toRightOf="@id/offset" />
+</RelativeLayout>
