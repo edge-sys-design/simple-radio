@@ -30,7 +30,7 @@ import _root_.android.widget.Toast
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.client.methods.HttpGet
 
-// These are throwing an exception. It would be good to find a bug upstream
+// These are throwing an exception. It would be good to file a bug upstream
 // but I'm going to wait until Scala 2.10.0-RC3 comes out to see if it's fixed.
 // import scala.concurrent.future
 // import scala.concurrent.ExecutionContext.Implicits.global
