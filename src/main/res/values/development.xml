@@ -1,0 +1,11 @@
+<resources>
+  <string name="development_build">true</string>
+  <string name="version">1.0.0-extremely-alpha-and-terrible</string>
+  <string name="updates_url">
+    http://download.edgesysdesign.com/simple-radio/CURRENT-HEAD
+  </string>
+  <string name="updates_error">
+    An error occurred while looking for a new update from git.
+  </string>
+  <string name="new_update_available">A new update is available.</string>
+</resources>

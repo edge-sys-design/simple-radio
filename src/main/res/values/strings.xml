@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Simple Radio</string>
-    <string name="version">1.0.0-extremely-alpha-and-terrible</string>
     <string name="memories">Memories</string>
     <string name="create_new">Create New</string>
     <string name="recall">Recall</string>
