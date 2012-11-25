@@ -2,7 +2,7 @@
           package="com.edgesysdesign.simpleradio">
 
   <application
-      android:icon="@drawable/android:star_big_on"
+      android:icon="@drawable/launcher_icon"
       android:label="@string/app_name"
       android:debuggable="true"
       android:theme="@android:style/Theme.Holo.Light">
