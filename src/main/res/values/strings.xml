@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Simple Radio</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="memories">Memories</string>
     <string name="create_new">Create New</string>
     <string name="recall">Recall</string>

@@ -7,5 +7,11 @@
   <string name="updates_error">
     An error occurred while looking for a new update from git.
   </string>
-  <string name="new_update_available">A new update is available.</string>
+  <string name="new_update_available">New Developer Update</string>
+  <string name="new_update_available_prompt">
+    You\'re following the developer upgrade track (tracking our Git repository).
+    A new commit has been made and the build bot has pushed a new APK to the
+    mirror. Would you like to download it?
+  </string>
+  <string name="downgrade_to_stable">Downgrade to Stable</string>
 </resources>

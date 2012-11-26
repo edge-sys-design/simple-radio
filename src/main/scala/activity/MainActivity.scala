@@ -18,8 +18,8 @@
 
 package com.edgesysdesign.simpleradio
 
-import _root_.android.app.Activity
-import _root_.android.content.{Context, Intent}
+import _root_.android.app.{Activity, AlertDialog}
+import _root_.android.content.{Context, DialogInterface, Intent}
 import _root_.android.net.{ConnectivityManager, Uri}
 import _root_.android.os.{AsyncTask, Bundle}
 import _root_.android.text.{Editable, TextWatcher}
@@ -77,10 +77,36 @@ class MainActivity extends Activity with TypedActivity {
                   Toast.LENGTH_SHORT).show(),
               right => {
                 if (right != getString(R.string.version)) {
-                  val latestAPK =
-                    s"${getString(R.string.updates_url)}/simpleradio-$right.apk"
-                  val intent = new Intent(Intent.ACTION_VIEW, Uri.parse(latestAPK))
-                  startActivity(intent)
+                  val builder = new AlertDialog.Builder(this)
+                  builder
+                    .setMessage(R.string.new_update_available_prompt)
+                    .setTitle(R.string.new_update_available)
+                    .setPositiveButton(
+                      R.string.yes,
+                      new DialogInterface.OnClickListener() {
+                        def onClick(dialog: DialogInterface, id: Int) {
+                          val latestAPK =
+                            s"${getString(R.string.updates_url)}/simpleradio-$right.apk"
+                          val intent = new Intent(Intent.ACTION_VIEW, Uri.parse(latestAPK))
+                          startActivity(intent)
+                        }
+                      })
+                    .setNeutralButton(
+                      R.string.downgrade_to_stable,
+                      new DialogInterface.OnClickListener() {
+                        def onClick(dialog: DialogInterface, id: Int) {
+                          Toast.makeText(
+                            MainActivity.this,
+                            "NYAN.",
+                            Toast.LENGTH_SHORT).show()
+                        }
+                      })
+                    .setNegativeButton(
+                      R.string.no,
+                      new DialogInterface.OnClickListener() {
+                        def onClick(dialog: DialogInterface, id: Int) {
+                        }
+                      }).create().show()
                 }
               }
             )
