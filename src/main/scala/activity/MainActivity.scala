@@ -39,8 +39,6 @@ import scala.concurrent.ops._
 
 class MainActivity extends Activity with TypedActivity {
 
-  implicit def toRunnable[F](f: => F): Runnable = new Runnable() { def run() = f }
-
   override def onCreate(bundle: Bundle) {
     super.onCreate(bundle)
     setContentView(R.layout.receive)
