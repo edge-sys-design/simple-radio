@@ -25,7 +25,7 @@ import _root_.android.os.{AsyncTask, Bundle}
 import _root_.android.text.{Editable, TextWatcher}
 import _root_.android.view.{Menu, MenuItem, View}
 import _root_.android.view.View.OnFocusChangeListener
-import _root_.android.widget.Toast
+import _root_.android.widget.{ArrayAdapter, Toast, Spinner}
 
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.client.methods.HttpGet
@@ -43,7 +43,17 @@ class MainActivity extends Activity with TypedActivity {
     super.onCreate(bundle)
     setContentView(R.layout.receive)
     findView(TR.frequency).setText("145.170")
-    findView(TR.pl_tone).setText("123.0 Hz")
+
+    val plToneSpinner = findView(TR.pl_tone)
+    val plTonesAdapter = ArrayAdapter.createFromResource(
+      this,
+      R.array.pl_tones,
+      android.R.layout.simple_spinner_item)
+
+    plTonesAdapter.setDropDownViewResource(
+      android.R.layout.simple_spinner_dropdown_item)
+    plToneSpinner.setAdapter(plTonesAdapter)
+
     findView(TR.offset).setText("-600 KHz")
 
     if (getString(R.string.development_build) == "true") {

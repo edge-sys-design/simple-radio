@@ -21,12 +21,10 @@
             android:hint="@string/offset"
             android:inputType="numberDecimal" />
 
-  <EditText android:id="@+id/pl_tone"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/frequency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/pl_tone"
-            android:inputType="numberDecimal"
-            android:layout_toRightOf="@id/offset" />
+  <Spinner android:id="@+id/pl_tone"
+           android:layout_alignParentLeft="true"
+           android:layout_below="@id/frequency"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_toRightOf="@id/offset" />
 </RelativeLayout>
