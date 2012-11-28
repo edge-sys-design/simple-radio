@@ -120,23 +120,24 @@ class MainActivity extends Activity with TypedActivity {
     true
   }
 
-  def onCreateMemoryClick(item: MenuItem) {
-    val toast = Toast.makeText(
-      this,
-      "NYAN NYAN NYAN NYAN NYAN-NYAN NYAN NYAN",
-      Toast.LENGTH_SHORT)
-    toast.show()
-  }
-
-  /** Delegate to an 'about' activity.
+  /** Handle items selected from the Options menu.
     *
-    * This is bad, these should be one function with a pattern match.
-    * But this works for experimenting. So meh.
-    *
-    * @todo Fix above.
+    * @param item The [[android.view.MenuItem]] that was pressed.
     */
-  def onAboutClick(item: MenuItem) {
-    val intent = new Intent(this, classOf[AboutActivity])
-    startActivity(intent)
+  override def onOptionsItemSelected(item: MenuItem): Boolean = {
+    item getItemId match {
+      case R.id.create_new => {
+        Toast.makeText(
+          this,
+          "NYAN NYAN NYAN NYAN NYAN-NYAN NYAN NYAN",
+          Toast.LENGTH_SHORT).show()
+      }
+      case R.id.about => {
+        val intent = new Intent(this, classOf[AboutActivity])
+        startActivity(intent)
+      }
+      case _ =>
+    }
+    true
   }
 }

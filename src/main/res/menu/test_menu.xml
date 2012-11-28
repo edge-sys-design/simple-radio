@@ -5,14 +5,12 @@
         android:title="@string/memories">
     <menu>
       <item android:id="@+id/create_new"
-            android:title="@string/create_new"
-            android:onClick="onCreateMemoryClick" />
+            android:title="@string/create_new" />
       <item android:id="@+id/recall"
             android:title="@string/recall" />
     </menu>
   </item>
 
   <item android:id="@+id/about"
-        android:title="@string/about"
-        android:onClick="onAboutClick" />
+        android:title="@string/about" />
 </menu>
