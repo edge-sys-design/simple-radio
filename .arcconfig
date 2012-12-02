@@ -1,9 +1,8 @@
 {
-  "project_id" : "simpleradio",
+  "project_id" : "Simple Radio App",
   "conduit_uri" : "https://phabricator.edgesysdesign.com/api/",
   "lint.engine" : "SimpleRadioLinters",
   "phutil_libraries" : {
     "phutil" : "phutil/"
   }
-
 }
