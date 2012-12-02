@@ -2,3 +2,4 @@
 /project/project
 /project/target
 *.class
+.phutil_module_cache
