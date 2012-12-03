@@ -8,7 +8,7 @@ object General {
     name := "SimpleRadio",
     version := "0.1",
     versionCode := 0,
-    scalaVersion := "2.10.0-RC2",
+    scalaVersion := "2.10.0-RC3",
     platformName in Android := "android-14",
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
     scalacOptions ++= Seq("-deprecation")
@@ -27,7 +27,7 @@ object General {
     AndroidManifestGenerator.settings ++
     AndroidMarketPublish.settings ++ Seq (
       keyalias in Android := "change-me",
-      libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC2" % "1.8" % "test"
+      libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC3" % "1.8-B1" % "test"
     )
 }
 
