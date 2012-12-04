@@ -1,9 +1,22 @@
 import com.edgesysdesign.simpleradio.{Frequency}
+import com.edgesysdesign.simpleradio.FrequencyImplicits._
+
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.FunSpec
 import org.scalatest.BeforeAndAfter
 
 class FrequencySpecs extends FunSpec with ShouldMatchers with BeforeAndAfter {
+  describe("The Frequency library's implicits") {
+    it("should convert Long, String, and Int to Frequency instances") {
+      146520.KHz.toString should be === "146.520.000"
+      146520000.Hz.toString should be === "146.520.000"
+      146.MHz.toString should be === "146.000.000"
+      "146".MHz.toString should be === "146.000.000"
+      "146.52".MHz.toString should be === "146.520.000"
+      "146.520.000".MHz.toString should be === "146.520.000"
+    }
+  }
+
   describe("The Frequency library") {
     it("should convert various forms of frequency strings to Hz") {
       new Frequency("14").toHz should be === 14000000

@@ -25,7 +25,13 @@ package com.edgesysdesign.simpleradio
   * amateur radio bands. It provides methods for working with the frequency and
   * transforming it in various ways -- however it does remain immutable.
   *
-  * It handles frequencyes in the following forms:
+  * Internally, the Frequency class '''always''' uses Hertz to perform math such
+  * as adding or subtracting. Hertz is always represented by a [[scala.Long]].
+  *
+  * Megahertz is always represented in a 3-segment [[java.lang.String]] and
+  * never contains units.
+  *
+  * It handles frequencies in the following forms:
   * "146" => 146.000.000
   * "146.52" => 146.520.000
   * "146.520" => 146.520.000
@@ -39,15 +45,20 @@ package com.edgesysdesign.simpleradio
   * }}}
   */
 class Frequency(val frequency: String) {
+
+  /** Construct a Frequency, given Hertz.
+    *
+    * @param frequency The frequency in '''hertz'''.
+    * @return Frequency
+    */
   def this(frequency: Long) = this(Frequency.toMHz(frequency))
 
   override def toString = frequency
-  def toMHz() = Frequency.toMHz(this)
   def toHz() = Frequency.toHz(this)
+  def toMHz() = Frequency.toMHz(this)
 }
 
 object Frequency {
-
   /** Convert a frequency from Hertz to Megahertz.
     *
     * @param frequency The frequency in Kilohertz.
