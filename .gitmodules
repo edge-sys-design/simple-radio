@@ -1,0 +1,3 @@
+[submodule "src/externals/Frequency"]
+	path = src/externals/Frequency
+	url = git://github.com/edge-sys-design/Frequency.git/
