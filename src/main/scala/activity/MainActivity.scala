@@ -30,12 +30,8 @@ import _root_.android.widget.{ArrayAdapter, Toast, Spinner}
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.client.methods.HttpGet
 
-// These are throwing an exception. It would be good to file a bug upstream
-// but I'm going to wait until Scala 2.10.0-RC3 comes out to see if it's fixed.
-// import scala.concurrent.future
-// import scala.concurrent.ExecutionContext.Implicits.global
-// Instead, we can rely on the old, deprecated version.
-import scala.concurrent.ops._
+import scala.concurrent.future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class MainActivity extends Activity with TypedActivity {
 
@@ -62,7 +58,7 @@ class MainActivity extends Activity with TypedActivity {
       val networkInfo = connMgr.getActiveNetworkInfo()
 
       if (networkInfo != null && networkInfo.isConnected) {
-        spawn {
+        future {
           val client = new DefaultHttpClient()
           val httpGet =
             new HttpGet(s"${getString(R.string.updates_url)}/commit-info.txt")
