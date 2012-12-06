@@ -13,5 +13,4 @@
     A new commit has been made and the build bot has pushed a new APK to the
     mirror. Would you like to download it?
   </string>
-  <string name="downgrade_to_stable">Downgrade to Stable</string>
 </resources>

@@ -99,16 +99,6 @@ class MainActivity extends Activity with TypedActivity {
                           startActivity(intent)
                         }
                       })
-                    .setNeutralButton(
-                      R.string.downgrade_to_stable,
-                      new DialogInterface.OnClickListener() {
-                        def onClick(dialog: DialogInterface, id: Int) {
-                          Toast.makeText(
-                            MainActivity.this,
-                            "NYAN.",
-                            Toast.LENGTH_SHORT).show()
-                        }
-                      })
                     .setNegativeButton(
                       R.string.no,
                       new DialogInterface.OnClickListener() {
