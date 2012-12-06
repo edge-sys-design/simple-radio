@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:padding="16dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:padding="16dp"
+              android:orientation="vertical">
 
   <EditText android:id="@+id/frequency"
             android:layout_width="fill_parent"
@@ -13,18 +14,46 @@
             android:gravity="center_horizontal"
             android:inputType="numberDecimal" />
 
-  <EditText android:id="@+id/offset"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/frequency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/offset"
-            android:inputType="numberDecimal" />
+  <!-- Row of subcontrols -->
+  <LinearLayout android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
 
-  <Spinner android:id="@+id/pl_tone"
-           android:layout_alignParentLeft="true"
-           android:layout_below="@id/frequency"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_toRightOf="@id/offset" />
-</RelativeLayout>
+    <!-- PL Tone spinner -->
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="0dip"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1">
+
+      <Spinner android:id="@+id/pl_tone"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!-- Mode spinner -->
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="0dip"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1">
+
+      <Spinner android:id="@+id/mode"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+    <!-- Offset input -->
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="0dip"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1">
+
+      <EditText android:id="@+id/offset"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/offset"
+                android:inputType="numberDecimal"
+                android:layout_gravity="right" />
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>

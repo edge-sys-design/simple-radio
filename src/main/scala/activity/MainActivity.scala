@@ -45,10 +45,18 @@ class MainActivity extends Activity with TypedActivity {
       this,
       R.array.pl_tones,
       android.R.layout.simple_spinner_item)
-
     plTonesAdapter.setDropDownViewResource(
       android.R.layout.simple_spinner_dropdown_item)
     plToneSpinner.setAdapter(plTonesAdapter)
+
+    val modesSpinner = findView(TR.mode)
+    val modesAdapter = ArrayAdapter.createFromResource(
+      this,
+      R.array.modes,
+      android.R.layout.simple_spinner_item)
+    modesAdapter.setDropDownViewResource(
+      android.R.layout.simple_spinner_dropdown_item)
+    modesSpinner.setAdapter(modesAdapter)
 
     findView(TR.offset).setText("-600 KHz")
 
