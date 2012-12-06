@@ -22,7 +22,7 @@ import _root_.android.app.{Activity, AlertDialog}
 import _root_.android.content.{Context, DialogInterface, Intent}
 import _root_.android.net.{ConnectivityManager, Uri}
 import _root_.android.os.{AsyncTask, Bundle}
-import _root_.android.text.{Editable, TextWatcher}
+import _root_.android.text.{Editable, Html, TextWatcher}
 import _root_.android.view.{Menu, MenuItem, View}
 import _root_.android.view.View.OnFocusChangeListener
 import _root_.android.widget.{ArrayAdapter, Toast, Spinner}
@@ -65,7 +65,7 @@ class MainActivity extends Activity with TypedActivity {
         spawn {
           val client = new DefaultHttpClient()
           val httpGet =
-            new HttpGet(s"${getString(R.string.updates_url)}/commit-sha.txt")
+            new HttpGet(s"${getString(R.string.updates_url)}/commit-info.txt")
 
           val result: Either[Throwable, String] = try {
             val response = client.execute(httpGet)
@@ -84,17 +84,22 @@ class MainActivity extends Activity with TypedActivity {
                   getString(R.string.updates_error),
                   Toast.LENGTH_SHORT).show(),
               right => {
-                if (right != getString(R.string.version)) {
+                val commitSplit = right.split(" ", 2)
+                val commitHash = commitSplit.head
+                if (commitHash != getString(R.string.version)) {
+                  val message = Html.fromHtml(
+                    getString(R.string.new_update_available_prompt).format(
+                      commitSplit.tail.mkString))
                   val builder = new AlertDialog.Builder(this)
                   builder
-                    .setMessage(R.string.new_update_available_prompt)
+                    .setMessage(message)
                     .setTitle(R.string.new_update_available)
                     .setPositiveButton(
                       R.string.yes,
                       new DialogInterface.OnClickListener() {
                         def onClick(dialog: DialogInterface, id: Int) {
                           val latestAPK =
-                            s"${getString(R.string.updates_url)}/simpleradio-$right.apk"
+                            s"${getString(R.string.updates_url)}/simpleradio-$commitHash.apk"
                           val intent = new Intent(Intent.ACTION_VIEW, Uri.parse(latestAPK))
                           startActivity(intent)
                         }
