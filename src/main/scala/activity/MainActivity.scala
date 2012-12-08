@@ -134,7 +134,7 @@ class MainActivity extends Activity with TypedActivity {
     * @param item The [[android.view.MenuItem]] that was pressed.
     */
   override def onOptionsItemSelected(item: MenuItem): Boolean = {
-    item getItemId match {
+    item.getItemId match {
       case R.id.create_new => {
         Toast.makeText(
           this,

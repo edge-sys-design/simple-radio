@@ -11,7 +11,10 @@ object General {
     scalaVersion := "2.10.0-RC3",
     platformName in Android := "android-14",
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
-    scalacOptions ++= Seq("-deprecation")
+    scalacOptions ++= Seq(
+      "-language:implicitConversions",
+      "-deprecation",
+      "-feature")
   )
 
   val proguardSettings = Seq (
