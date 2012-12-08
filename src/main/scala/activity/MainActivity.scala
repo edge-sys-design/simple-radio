@@ -21,7 +21,7 @@ package com.edgesysdesign.simpleradio
 import _root_.android.app.{Activity, AlertDialog}
 import _root_.android.content.{Context, DialogInterface, Intent}
 import _root_.android.net.{ConnectivityManager, Uri}
-import _root_.android.os.{AsyncTask, Bundle}
+import _root_.android.os.{AsyncTask, Build, Bundle}
 import _root_.android.text.{Editable, Html, TextWatcher}
 import _root_.android.view.{Menu, MenuItem, View}
 import _root_.android.view.View.OnFocusChangeListener
@@ -60,7 +60,7 @@ class MainActivity extends Activity with TypedActivity {
 
     findView(TR.offset).setText("-600 KHz")
 
-    if (getString(R.string.development_build) == "true") {
+    if (getString(R.string.development_build) == "true" && Build.PRODUCT != "sdk") {
       // If we have a network connection, go ahead and check for an update.
       val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE).asInstanceOf[ConnectivityManager]
       val networkInfo = connMgr.getActiveNetworkInfo()
