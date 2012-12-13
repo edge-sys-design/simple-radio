@@ -1,5 +1,5 @@
 <resources>
-  <string name="development_build">true</string>
+  <bool name="development_build">true</bool>
   <string name="version">1.0.0-extremely-alpha-and-terrible</string>
   <string name="updates_url">
     http://download.edgesysdesign.com/simple-radio/CURRENT-HEAD

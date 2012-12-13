@@ -18,25 +18,21 @@
 
 package com.edgesysdesign.simpleradio
 
-import _root_.android.app.{Activity, AlertDialog}
-import _root_.android.content.{Context, DialogInterface, Intent}
-import _root_.android.net.{ConnectivityManager, Uri}
+import _root_.android.app.Activity
+import _root_.android.content.Intent
 import _root_.android.os.{AsyncTask, Build, Bundle}
-import _root_.android.text.{Editable, Html, TextWatcher}
+import _root_.android.text.{Editable, TextWatcher}
 import _root_.android.view.{Menu, MenuItem, View}
 import _root_.android.view.View.OnFocusChangeListener
 import _root_.android.widget.{ArrayAdapter, Toast, Spinner}
 
-import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.client.methods.HttpGet
-
-import scala.concurrent.future
-import scala.concurrent.ExecutionContext.Implicits.global
+import com.edgesysdesign.simpleradio.devel.Devel
 
 class MainActivity extends Activity with TypedActivity {
 
   override def onCreate(bundle: Bundle) {
     super.onCreate(bundle)
+    val res = getResources()
     setContentView(R.layout.receive)
     findView(TR.frequency).setText("145.170")
 
@@ -60,66 +56,8 @@ class MainActivity extends Activity with TypedActivity {
 
     findView(TR.offset).setText("-600 KHz")
 
-    if (getString(R.string.development_build) == "true" && Build.PRODUCT != "sdk") {
-      // If we have a network connection, go ahead and check for an update.
-      val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE).asInstanceOf[ConnectivityManager]
-      val networkInfo = connMgr.getActiveNetworkInfo()
-
-      if (networkInfo != null && networkInfo.isConnected) {
-        future {
-          val client = new DefaultHttpClient()
-          val httpGet =
-            new HttpGet(s"${getString(R.string.updates_url)}/commit-info.txt")
-
-          val result: Either[Throwable, String] = try {
-            val response = client.execute(httpGet)
-            val is = response.getEntity().getContent()
-            Right(scala.io.Source.fromInputStream(is).mkString.trim)
-          }
-          catch {
-            case e: Throwable => Left(e)
-          }
-
-          runOnUiThread {
-            result.fold(
-              left =>
-                Toast.makeText(
-                  this,
-                  getString(R.string.updates_error),
-                  Toast.LENGTH_SHORT).show(),
-              right => {
-                val commitSplit = right.split(" ", 2)
-                val commitHash = commitSplit.head
-                if (commitHash != getString(R.string.version)) {
-                  val message = Html.fromHtml(
-                    getString(R.string.new_update_available_prompt).format(
-                      commitSplit.tail.mkString))
-                  val builder = new AlertDialog.Builder(this)
-                  builder
-                    .setMessage(message)
-                    .setTitle(R.string.new_update_available)
-                    .setPositiveButton(
-                      R.string.yes,
-                      new DialogInterface.OnClickListener() {
-                        def onClick(dialog: DialogInterface, id: Int) {
-                          val latestAPK =
-                            s"${getString(R.string.updates_url)}/simpleradio-$commitHash.apk"
-                          val intent = new Intent(Intent.ACTION_VIEW, Uri.parse(latestAPK))
-                          startActivity(intent)
-                        }
-                      })
-                    .setNegativeButton(
-                      R.string.no,
-                      new DialogInterface.OnClickListener() {
-                        def onClick(dialog: DialogInterface, id: Int) {
-                        }
-                      }).create().show()
-                }
-              }
-            )
-          }
-        }
-      }
+    if (res.getBoolean(R.bool.development_build) && Build.PRODUCT != "sdk") {
+      Devel.checkForUpdates(this)
     }
   }
 

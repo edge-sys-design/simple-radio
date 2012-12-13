@@ -16,9 +16,9 @@
   * Author(s): Ricky Elrod <relrod@edgesysdesign.com>
   */
 
-package com.edgesysdesign
+package com.edgesysdesign.simpleradio
 
-package object simpleradio {
+package object Implicits {
 
   /** Convert a function to a Runnable for runOnUiThread.
    *
