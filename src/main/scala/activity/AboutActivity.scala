@@ -18,12 +18,39 @@
 
 package com.edgesysdesign.simpleradio
 
+import _root_.android.animation.ObjectAnimator
 import _root_.android.app.Activity
+import _root_.android.content.{Context, Intent}
+import _root_.android.net.Uri
 import _root_.android.os.Bundle
+import _root_.android.view.{GestureDetector, MotionEvent, View}
+import _root_.android.view.GestureDetector.{SimpleOnGestureListener, OnDoubleTapListener}
+import _root_.android.view.View.OnTouchListener
 
 class AboutActivity extends Activity with TypedActivity {
   override def onCreate(bundle: Bundle) {
     super.onCreate(bundle)
     setContentView(R.layout.about)
+
+    val gd = new GestureDetector(this, new MyDoubleTapDetector)
+
+    val view = findView(TR.about_launcher_icon)
+    view.setOnTouchListener(new OnTouchListener {
+      override def onTouch(view: View, event: MotionEvent): Boolean = {
+        gd.onTouchEvent(event)
+        true
+      }
+    })
+  }
+
+  class MyDoubleTapDetector extends SimpleOnGestureListener with OnDoubleTapListener {
+    override def onDoubleTap(event: MotionEvent): Boolean = {
+      val view = findView(TR.about_launcher_icon)
+      ObjectAnimator
+        .ofFloat(view, "rotation", 0f, 360f)
+        .setDuration(1000)
+        .start()
+      true
+    }
   }
 }
