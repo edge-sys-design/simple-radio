@@ -80,7 +80,7 @@ object Devel {
                     def onClick(dialog: DialogInterface, id: Int) {
                       val latestAPK =
                         context.getString(R.string.updates_url) +
-                        "/simpleradio-$commitHash.apk"
+                        s"/simpleradio-$commitHash.apk"
                       val intent = new Intent(Intent.ACTION_VIEW, Uri.parse(latestAPK))
                       context.startActivity(intent)
                     }
