@@ -18,6 +18,8 @@
 
 package com.edgesysdesign.simpleradio
 
+import com.edgesysdesign.frequency.Frequency
+
 package object Implicits {
 
   /** Convert a function to a Runnable for runOnUiThread.
@@ -26,4 +28,9 @@ package object Implicits {
    */
   implicit def toRunnable[F](f: => F): Runnable = new Runnable() { def run() = f }
 
+  /** Convert a Frequency to a String.
+    *
+    * @param frequency The frequency to convert.
+    */
+  implicit def freqToString(f: Frequency) = new String(f.toString)
 }

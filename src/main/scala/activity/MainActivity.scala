@@ -27,6 +27,8 @@ import _root_.android.view.View.OnFocusChangeListener
 import _root_.android.widget.{ArrayAdapter, Toast, Spinner}
 
 import com.edgesysdesign.simpleradio.devel.Devel
+import com.edgesysdesign.simpleradio.Implicits._
+import com.edgesysdesign.frequency.FrequencyImplicits._
 
 class MainActivity extends Activity with TypedActivity {
 
@@ -34,7 +36,7 @@ class MainActivity extends Activity with TypedActivity {
     super.onCreate(bundle)
     val res = getResources()
     setContentView(R.layout.receive)
-    findView(TR.frequency).setText("145.170")
+    findView(TR.frequency).setText("145.170".MHz)
 
     val plToneSpinner = findView(TR.pl_tone)
     val plTonesAdapter = ArrayAdapter.createFromResource(
