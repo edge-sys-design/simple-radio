@@ -18,4 +18,4 @@ if [[ "$branch" -ne "master" ]]; then
 fi
 
 git pull origin master
-git submodule update --init
+git submodule update --init --recursive
