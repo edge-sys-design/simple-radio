@@ -58,7 +58,7 @@ class SampleAudioActivity extends Activity with TypedActivity {
       .takeWhile(_ != -1)
       .foreach { i =>
         audioTrack.write(buffer, 0, i)
-              }
+      }
     }
   }
 }
