@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:id="@+id/memories"
-        android:showAsAction="ifRoom"
-        android:title="@string/memories">
+  <item
+      android:id="@+id/memories"
+      android:showAsAction="ifRoom"
+      android:title="@string/memories">
     <menu>
-      <item android:id="@+id/create_new"
-            android:title="@string/create_new" />
-      <item android:id="@+id/recall"
-            android:title="@string/recall" />
+      <item
+          android:id="@+id/create_new"
+          android:title="@string/create_new" />
+      <item
+          android:id="@+id/recall"
+          android:title="@string/recall" />
     </menu>
   </item>
 
-  <item android:id="@+id/about"
-        android:title="@string/about" />
+  <item
+      android:id="@+id/about"
+      android:title="@string/about" />
+
+  <item
+      android:id="@+id/sample_audio"
+      android:title="@string/sample_audio" />
 </menu>

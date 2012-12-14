@@ -83,6 +83,10 @@ class MainActivity extends Activity with TypedActivity {
         val intent = new Intent(this, classOf[AboutActivity])
         startActivity(intent)
       }
+      case R.id.sample_audio => {
+        val intent = new Intent(this, classOf[SampleAudioActivity])
+        startActivity(intent)
+      }
       case _ =>
     }
     true
