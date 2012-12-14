@@ -4,12 +4,20 @@ import Keys._
 import AndroidKeys._
 
 object General {
+
   val settings = Defaults.defaultSettings ++ Seq (
     name := "SimpleRadio",
     version := "0.1",
     versionCode := 0,
     scalaVersion := "2.10.0-RC3",
     platformName in Android := "android-14",
+     resolvers += (
+      "Edge System Design Repository" at "http://jvmrepo.edgesysdesign.com/"
+    ),
+    libraryDependencies ++= Seq(
+      "com.edgesysdesign" %% "frequency" % "master",
+      "org.scalatest" % "scalatest_2.10.0-RC3" % "1.8-B1" % "test"
+    ),
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
     scalacOptions ++= Seq(
       "-language:implicitConversions",
@@ -32,8 +40,7 @@ object General {
     proguardSettings ++
     AndroidManifestGenerator.settings ++
     AndroidMarketPublish.settings ++ Seq (
-      keyalias in Android := "change-me",
-      libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC3" % "1.8-B1" % "test"
+      keyalias in Android := "change-me"
     )
 }
 
