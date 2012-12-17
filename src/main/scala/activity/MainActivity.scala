@@ -18,12 +18,15 @@
 
 package com.edgesysdesign.simpleradio
 
+import _root_.android.animation.ObjectAnimator
 import _root_.android.app.Activity
 import _root_.android.content.Intent
 import _root_.android.os.{AsyncTask, Build, Bundle}
 import _root_.android.text.{Editable, TextWatcher}
 import _root_.android.view.{Menu, MenuItem, View}
-import _root_.android.view.View.OnFocusChangeListener
+import _root_.android.view.{GestureDetector, MotionEvent, View}
+import _root_.android.view.GestureDetector.{SimpleOnGestureListener, OnDoubleTapListener}
+import _root_.android.view.View.OnTouchListener
 import _root_.android.widget.{ArrayAdapter, Toast, Spinner}
 
 import com.edgesysdesign.simpleradio.devel.Devel
@@ -36,7 +39,16 @@ class MainActivity extends Activity with TypedActivity {
     super.onCreate(bundle)
     val res = getResources()
     setContentView(R.layout.receive)
-    findView(TR.frequency).setText("145.170".MHz)
+
+    val gd = new GestureDetector(this, new FrequencyFlingDetector)
+    val frequency = findView(TR.frequency)
+    frequency.setText("145.170".MHz)
+    frequency.setOnTouchListener(new OnTouchListener {
+      override def onTouch(view: View, event: MotionEvent): Boolean = {
+        gd.onTouchEvent(event)
+        true
+      }
+    })
 
     val plToneSpinner = findView(TR.pl_tone)
     val plTonesAdapter = ArrayAdapter.createFromResource(
@@ -60,6 +72,18 @@ class MainActivity extends Activity with TypedActivity {
 
     if (res.getBoolean(R.bool.development_build) && Build.PRODUCT != "sdk") {
       Devel.checkForUpdates(this)
+    }
+  }
+
+  class FrequencyFlingDetector extends SimpleOnGestureListener with OnDoubleTapListener {
+    override def onDoubleTap(event: MotionEvent): Boolean = {
+      val frequency = findView(TR.frequency)
+      ObjectAnimator
+        .ofFloat(frequency, "rotation", 0f, 360f)
+        .setDuration(1000)
+        .start()
+      frequency.setText(frequency.getText.toString.MHz + 50.kHz)
+      true
     }
   }
 
