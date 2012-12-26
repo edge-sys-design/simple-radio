@@ -54,11 +54,11 @@ class SampleAudioActivity extends Activity with TypedActivity {
 
 
       Iterator
-      .continually(sample.read(buffer, 0, minBufferSize))
-      .takeWhile(_ != -1)
-      .foreach { i =>
-        audioTrack.write(buffer, 0, i)
-      }
+        .continually(sample.read(buffer, 0, minBufferSize))
+        .takeWhile(_ != -1)
+        .foreach { i =>
+          audioTrack.write(buffer, 0, i)
+        }
     }
   }
 }
