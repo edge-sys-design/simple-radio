@@ -22,6 +22,7 @@ import _root_.android.app.{Activity, AlertDialog}
 import _root_.android.content.{Context, DialogInterface, Intent}
 import _root_.android.net.{ConnectivityManager, Uri}
 import _root_.android.text.Html
+import _root_.android.util.Log
 import _root_.android.widget.Toast
 
 import com.edgesysdesign.simpleradio.Implicits._
@@ -48,53 +49,72 @@ object Devel {
           new HttpGet(s"${context.getString(R.string.updates_url)}/commit-info.txt")
 
         val result: Either[Throwable, String] = try {
-          val response = client.execute(httpGet)
-          val is = response.getEntity().getContent()
-          Right(Source.fromInputStream(is).mkString.trim)
+          val response = client.execute(httpGet).getEntity
+          if (response.getContentType.getValue.startsWith("text/plain")) {
+            val body = Source.fromInputStream(response.getContent)
+              .mkString
+              .trim
+            Right(body)
+          } else {
+            Left(new IllegalArgumentException("Invalid Content Type"))
+          }
         }
         catch {
           case e: Throwable => Left(e)
         }
 
         context.asInstanceOf[Activity].runOnUiThread {
-          result.fold(
-            left =>
+          result match {
+            case Left(left) => {
+              Log.w(
+                "Devel.checkForUpdates",
+                "An error occurred while checking for updates. Bad content " +
+                "type?")
               Toast.makeText(
                 context,
                 context.getString(R.string.updates_error),
-                Toast.LENGTH_SHORT).show(),
-            right => {
+                Toast.LENGTH_SHORT).show()
+            }
+            case Right(right) => {
               val commitSplit = right.split(" ", 2)
               val commitHash = commitSplit.head
               if (commitHash != context.getString(R.string.version)) {
                 val message = Html.fromHtml(
                   context.getString(R.string.new_update_available_prompt).format(
                     commitSplit.tail.mkString))
-                val builder = new AlertDialog.Builder(context)
-                builder
-                .setMessage(message)
-                .setTitle(R.string.new_update_available)
-                .setPositiveButton(
-                  R.string.yes,
-                  new DialogInterface.OnClickListener() {
-                    def onClick(dialog: DialogInterface, id: Int) {
-                      val latestAPK =
-                        context.getString(R.string.updates_url) +
-                        s"/simpleradio-$commitHash.apk"
-                      val intent = new Intent(Intent.ACTION_VIEW, Uri.parse(latestAPK))
-                      context.startActivity(intent)
-                    }
-                  })
-                .setNegativeButton(
-                  R.string.no,
-                  new DialogInterface.OnClickListener() {
-                    def onClick(dialog: DialogInterface, id: Int) {
-                    }
-                  }).create().show()
+                new AlertDialog.Builder(context)
+                  .setMessage(message)
+                  .setTitle(R.string.new_update_available)
+                  .setPositiveButton(
+                    R.string.yes,
+                    new AutoUpdateButtonHandler(context, commitHash))
+                  .setNegativeButton(
+                    R.string.no,
+                    new AutoUpdateButtonHandler(context, commitHash))
+                  .create()
+                  .show()
               }
             }
-          )
+          }
         }
+      }
+    }
+  }
+}
+
+class AutoUpdateButtonHandler(context: Context, commitHash: String)
+  extends DialogInterface.OnClickListener {
+  def onClick(dialog: DialogInterface, which: Int) {
+    which match {
+      case DialogInterface.BUTTON_POSITIVE => {
+        val latestAPK =
+          context.getString(R.string.updates_url) +
+          s"/simpleradio-$commitHash.apk"
+        val intent = new Intent(Intent.ACTION_VIEW, Uri.parse(latestAPK))
+        context.startActivity(intent)
+      }
+      case DialogInterface.BUTTON_NEGATIVE => {
+        dialog.dismiss()
       }
     }
   }
