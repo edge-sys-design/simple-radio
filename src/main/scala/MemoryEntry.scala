@@ -1,6 +1,6 @@
 package com.edgesysdesign.simpleradio
 
-import _root_.android.content.{ContentValues, Context}
+import _root_.android.content.Context
 import _root_.android.database.sqlite.{SQLiteDatabase, SQLiteOpenHelper}
 
 /** A memory entry that can quickly switch the radio to predefined settings.
@@ -35,9 +35,10 @@ class MemoryEntryHelper(context: Context)
   override def onCreate(db: SQLiteDatabase) {
     db.execSQL("""
       |CREATE TABLE memory_entries(
-      |  id integer primary key,
+      |  _id integer primary key,
       |  label varchar(255) not null,
       |  frequency integer not null,
+      |  mode varchar(10) not null,
       |  pl_tone float,
       |  shift varchar(1),
       |  offset double);

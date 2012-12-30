@@ -19,15 +19,15 @@
 package com.edgesysdesign.simpleradio
 
 import _root_.android.animation.ObjectAnimator
-import _root_.android.app.Activity
-import _root_.android.content.Intent
+import _root_.android.app.{Activity, AlertDialog}
+import _root_.android.content.{ContentValues, DialogInterface, Intent}
 import _root_.android.os.{AsyncTask, Build, Bundle}
 import _root_.android.text.{Editable, TextWatcher}
 import _root_.android.view.{Menu, MenuItem, View}
 import _root_.android.view.{GestureDetector, MotionEvent, View}
 import _root_.android.view.GestureDetector.{SimpleOnGestureListener, OnDoubleTapListener}
 import _root_.android.view.View.OnTouchListener
-import _root_.android.widget.{ArrayAdapter, Toast, Spinner}
+import _root_.android.widget.{ArrayAdapter, EditText, Toast, Spinner}
 
 import com.edgesysdesign.simpleradio.devel.Devel
 import com.edgesysdesign.simpleradio.Implicits._
@@ -43,12 +43,13 @@ class MainActivity extends Activity with TypedActivity {
     val gd = new GestureDetector(this, new FrequencyFlingDetector)
     val frequency = findView(TR.frequency)
     frequency.setText("145.170".MHz)
-    frequency.setOnTouchListener(new OnTouchListener {
+/*    frequency.setOnTouchListener(new OnTouchListener {
       override def onTouch(view: View, event: MotionEvent): Boolean = {
         gd.onTouchEvent(event)
         true
       }
     })
+*/
 
     val plToneSpinner = findView(TR.pl_tone)
     val plTonesAdapter = ArrayAdapter.createFromResource(
@@ -100,10 +101,35 @@ class MainActivity extends Activity with TypedActivity {
   override def onOptionsItemSelected(item: MenuItem): Boolean = {
     item.getItemId match {
       case R.id.create_new => {
-        Toast.makeText(
-          this,
-          "NYAN NYAN NYAN NYAN NYAN-NYAN NYAN NYAN",
-          Toast.LENGTH_SHORT).show()
+
+        val labelInput = new EditText(this)
+        labelInput.setHint(R.string.memory_name_placeholder)
+        labelInput.setSingleLine(true)
+
+        val labelDialog = new AlertDialog.Builder(this)
+          .setTitle(R.string.memory_label)
+          .setMessage(R.string.memory_query)
+          .setView(labelInput)
+          .setPositiveButton(
+            R.string.okay,
+            new DialogInterface.OnClickListener() {
+              def onClick(dialog: DialogInterface, which: Int) {
+                val values = new ContentValues()
+                values.put("label", labelInput.getText.toString)
+                values.put(
+                  "frequency",
+                  Long.box(findView(TR.frequency).getText.toString.MHz.Hz))
+                values.put("pl_tone", findView(TR.pl_tone).getSelectedItem.toString.toDouble)
+                values.put("mode", findView(TR.mode).getSelectedItem.toString)
+
+                val db = new MemoryEntryHelper(MainActivity.this).getWritableDatabase
+                db.insert("memory_entries", null, values)
+                Toast.makeText(
+                  MainActivity.this,
+                  getString(R.string.memory_saved),
+                  Toast.LENGTH_SHORT).show()
+              }
+            }).show()
       }
       case R.id.about => {
         val intent = new Intent(this, classOf[AboutActivity])

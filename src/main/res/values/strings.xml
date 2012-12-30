@@ -2,9 +2,7 @@
     <string name="app_name">Simple Radio</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="memories">Memories</string>
-    <string name="create_new">Create New</string>
-    <string name="recall">Recall</string>
+    <string name="okay">Okay</string>
     <string name="main_menu">Main Menu</string>
     <string name="about">About</string>
     <string name="sample_audio">Sample Audio</string>
@@ -13,6 +11,15 @@
     <string name="frequency">Frequency</string>
     <string name="pl_tone">PL Tone</string>
     <string name="offset">Offset</string>
+
+    <!-- Memories -->
+    <string name="memories">Memories</string>
+    <string name="create_new">Create New</string>
+    <string name="recall">Recall</string>
+    <string name="memory_label">Memory Label</string>
+    <string name="memory_query">What should this memory entry be called?</string>
+    <string name="memory_name_placeholder">My local repeater...</string>
+    <string name="memory_saved">The memory (hopefully) saved correctly.</string>
 
     <!-- Legal -->
     <string name="copyright">
