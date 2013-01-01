@@ -1,7 +1,10 @@
 package com.edgesysdesign.simpleradio
 
 import _root_.android.content.Context
+import _root_.android.database.Cursor
 import _root_.android.database.sqlite.{SQLiteDatabase, SQLiteOpenHelper}
+
+import com.edgesysdesign.frequency.FrequencyImplicits._
 
 /** A memory entry that can quickly switch the radio to predefined settings.
   *
@@ -16,17 +19,28 @@ case class MemoryEntry(
   val id: Long,
   val label: String,
   val frequency: Long,
+  val mode: String,
   val plTone: Option[Double],
   val shift: Option[String],
-  val offset: Option[Double]
-)
+  val offset: Option[Double]) {
+  override val toString = s"$label (${frequency.Hz.MHz} MHz)"
+}
 
-object MemoryEntryHelper {
+object MemoryEntry {
   val DatabaseVersion = 1
+
+  def fromCursor(cursor: Cursor) = MemoryEntry(
+    cursor.getLong(0),
+    cursor.getString(1),
+    cursor.getLong(2),
+    cursor.getString(3),
+    Option(cursor.getFloat(4)),
+    Option(cursor.getString(5)),
+    Option(cursor.getFloat(6)))
 }
 
 class MemoryEntryHelper(context: Context)
-    extends SQLiteOpenHelper(context, "simpleradio", null, MemoryEntryHelper.DatabaseVersion) {
+    extends SQLiteOpenHelper(context, "simpleradio", null, MemoryEntry.DatabaseVersion) {
 
   /** Create the table on a fresh install of the application.
     *
@@ -41,7 +55,7 @@ class MemoryEntryHelper(context: Context)
       |  mode varchar(10) not null,
       |  pl_tone float,
       |  shift varchar(1),
-      |  offset double);
+      |  offset float);
       |""".stripMargin)
   }
 

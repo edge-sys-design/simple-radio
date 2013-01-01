@@ -34,11 +34,11 @@ import com.edgesysdesign.simpleradio.Implicits._
 import com.edgesysdesign.frequency.FrequencyImplicits._
 
 class MainActivity extends Activity with TypedActivity {
-
   override def onCreate(bundle: Bundle) {
     super.onCreate(bundle)
     val res = getResources()
     setContentView(R.layout.receive)
+    val db = new MemoryEntryHelper(this).getWritableDatabase
 
     val gd = new GestureDetector(this, new FrequencyFlingDetector)
     val frequency = findView(TR.frequency)
@@ -70,6 +70,27 @@ class MainActivity extends Activity with TypedActivity {
     modesSpinner.setAdapter(modesAdapter)
 
     findView(TR.offset).setText("-600 KHz")
+
+    val memoryCursor = db.query(
+      "memory_entries",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null)
+    memoryCursor.moveToFirst()
+    val memories = for (i <- 0 to memoryCursor.getCount() - 1) yield {
+      val memory = MemoryEntry.fromCursor(memoryCursor)
+      memoryCursor.moveToNext()
+      memory
+    }
+
+    val memoriesAdapter = new ArrayAdapter(
+      this,
+      android.R.layout.simple_list_item_1,
+      memories.toArray)
+    findView(TR.memory_recall).setAdapter(memoriesAdapter)
 
     if (res.getBoolean(R.bool.development_build) && Build.PRODUCT != "sdk") {
       Devel.checkForUpdates(this)

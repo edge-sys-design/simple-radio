@@ -17,7 +17,7 @@
   <!-- Row of subcontrols -->
   <LinearLayout android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
     <!-- PL Tone spinner -->
     <LinearLayout android:orientation="vertical"
@@ -39,7 +39,7 @@
       <Spinner android:id="@+id/mode"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_gravity="center_horizontal"/>
+               android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
     <!-- Offset input -->
@@ -55,5 +55,15 @@
                 android:inputType="numberDecimal"
                 android:layout_gravity="right" />
     </LinearLayout>
+  </LinearLayout>
+
+  <!-- Memory recall list -->
+  <LinearLayout android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+    <ListView android:id="@+id/memory_recall"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent" />
   </LinearLayout>
 </LinearLayout>
