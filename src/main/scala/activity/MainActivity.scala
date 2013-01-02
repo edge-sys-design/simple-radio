@@ -27,11 +27,13 @@ import _root_.android.view.{Menu, MenuItem, View}
 import _root_.android.view.{GestureDetector, MotionEvent, View}
 import _root_.android.view.GestureDetector.{SimpleOnGestureListener, OnDoubleTapListener}
 import _root_.android.view.View.OnTouchListener
-import _root_.android.widget.{ArrayAdapter, EditText, Toast, Spinner}
+import _root_.android.widget.{ArrayAdapter, EditText, TextView, Toast, Spinner}
 
 import com.edgesysdesign.simpleradio.devel.Devel
 import com.edgesysdesign.simpleradio.Implicits._
 import com.edgesysdesign.frequency.FrequencyImplicits._
+
+import scala.language.reflectiveCalls
 
 class MainActivity extends Activity with TypedActivity {
   override def onCreate(bundle: Bundle) {
@@ -71,15 +73,9 @@ class MainActivity extends Activity with TypedActivity {
 
     findView(TR.offset).setText("-600 KHz")
 
-    val memoryCursor = db.query(
-      "memory_entries",
-      null,
-      null,
-      null,
-      null,
-      null,
-      null)
-    memoryCursor.moveToFirst()
+    val memoryCursor = db
+      .query("memory_entries", null, null, null, null, null, null)
+      .tap(_.moveToFirst())
     val memories = for (i <- 0 to memoryCursor.getCount() - 1) yield {
       val memory = MemoryEntry.fromCursor(memoryCursor)
       memoryCursor.moveToNext()
@@ -90,7 +86,12 @@ class MainActivity extends Activity with TypedActivity {
       this,
       android.R.layout.simple_list_item_1,
       memories.toArray)
-    findView(TR.memory_recall).setAdapter(memoriesAdapter)
+
+    findView(TR.memory_recall).tap { view =>
+      view.addHeaderView(
+        new TextView(this).tap(_.setText(R.string.memories)))
+      view.setAdapter(memoriesAdapter)
+    }
 
     if (res.getBoolean(R.bool.development_build) && Build.PRODUCT != "sdk") {
       Devel.checkForUpdates(this)
