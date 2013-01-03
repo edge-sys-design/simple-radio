@@ -36,6 +36,9 @@ import com.edgesysdesign.frequency.FrequencyImplicits._
 import scala.language.reflectiveCalls
 
 class MainActivity extends Activity with TypedActivity {
+  // TODO: Scala-ify this.
+  val memories = new java.util.ArrayList[MemoryEntry]
+
   override def onCreate(bundle: Bundle) {
     super.onCreate(bundle)
     val res = getResources()
@@ -76,22 +79,17 @@ class MainActivity extends Activity with TypedActivity {
     val memoryCursor = db
       .query("memory_entries", null, null, null, null, null, null)
       .tap(_.moveToFirst())
-    val memories = for (i <- 0 to memoryCursor.getCount() - 1) yield {
-      val memory = MemoryEntry.fromCursor(memoryCursor)
+    for (i <- 0 to memoryCursor.getCount() - 1) {
+      memories.add(MemoryEntry.fromCursor(memoryCursor))
       memoryCursor.moveToNext()
-      memory
     }
 
     val memoriesAdapter = new ArrayAdapter(
       this,
       android.R.layout.simple_list_item_1,
-      memories.toArray)
+      memories)
 
-    findView(TR.memory_recall).tap { view =>
-      view.addHeaderView(
-        new TextView(this).tap(_.setText(R.string.memories)))
-      view.setAdapter(memoriesAdapter)
-    }
+    findView(TR.memory_recall).setAdapter(memoriesAdapter)
 
     if (res.getBoolean(R.bool.development_build) && Build.PRODUCT != "sdk") {
       Devel.checkForUpdates(this)
@@ -145,7 +143,27 @@ class MainActivity extends Activity with TypedActivity {
                 values.put("mode", findView(TR.mode).getSelectedItem.toString)
 
                 val db = new MemoryEntryHelper(MainActivity.this).getWritableDatabase
-                db.insert("memory_entries", null, values)
+                val id = db.insert("memory_entries", null, values)
+
+                val memoryCursor = db
+                  .query(
+                    "memory_entries",
+                    null,
+                    "_id = ?",
+                    Array(id.toString),
+                    null,
+                    null,
+                    null)
+                  .tap(_.moveToFirst())
+
+                val adapter = findView(TR.memory_recall)
+                  .getAdapter
+                  .asInstanceOf[ArrayAdapter[MemoryEntry]]
+                adapter.add(MemoryEntry.fromCursor(memoryCursor))
+                runOnUiThread {
+                  adapter.notifyDataSetChanged()
+                }
+
                 Toast.makeText(
                   MainActivity.this,
                   getString(R.string.memory_saved),

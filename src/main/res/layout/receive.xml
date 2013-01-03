@@ -58,6 +58,12 @@
   </LinearLayout>
 
   <!-- Memory recall list -->
+  <TextView android:id="@+id/memory_list_header_text"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="left"
+            android:text="@string/memories" />
+
   <LinearLayout android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">

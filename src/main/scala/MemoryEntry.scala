@@ -1,6 +1,6 @@
 package com.edgesysdesign.simpleradio
 
-import _root_.android.content.Context
+import _root_.android.content.{ContentValues, Context}
 import _root_.android.database.Cursor
 import _root_.android.database.sqlite.{SQLiteDatabase, SQLiteOpenHelper}
 
@@ -20,23 +20,24 @@ case class MemoryEntry(
   val label: String,
   val frequency: Long,
   val mode: String,
-  val plTone: Option[Double],
+  val plTone: Option[Float],
   val shift: Option[String],
-  val offset: Option[Double]) {
+  val offset: Option[Float]) {
   override val toString = s"$label (${frequency.Hz.MHz} MHz)"
 }
 
 object MemoryEntry {
   val DatabaseVersion = 1
 
+  /** Construct a [[MemoryInstance]] object from a cursor. */
   def fromCursor(cursor: Cursor) = MemoryEntry(
-    cursor.getLong(0),
-    cursor.getString(1),
-    cursor.getLong(2),
-    cursor.getString(3),
-    Option(cursor.getFloat(4)),
-    Option(cursor.getString(5)),
-    Option(cursor.getFloat(6)))
+    cursor.getLong(0), // id
+    cursor.getString(1), // label
+    cursor.getLong(2), // frequency
+    cursor.getString(3), // mode
+    Option(cursor.getFloat(4)),  // plTone
+    Option(cursor.getString(5)), // shift
+    Option(cursor.getFloat(6))) // offset
 }
 
 class MemoryEntryHelper(context: Context)
