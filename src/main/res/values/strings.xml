@@ -6,6 +6,7 @@
     <string name="main_menu">Main Menu</string>
     <string name="about">About</string>
     <string name="sample_audio">Sample Audio</string>
+    <string name="text_field_unempty">The text field must not be empty.</string>
 
     <!-- Radio UI -->
     <string name="frequency">Frequency</string>

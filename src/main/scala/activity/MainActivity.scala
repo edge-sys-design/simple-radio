@@ -130,46 +130,59 @@ class MainActivity extends Activity with TypedActivity {
           .setTitle(R.string.memory_label)
           .setMessage(R.string.memory_query)
           .setView(labelInput)
-          .setPositiveButton(
-            R.string.okay,
-            new DialogInterface.OnClickListener() {
-              def onClick(dialog: DialogInterface, which: Int) {
-                val values = new ContentValues()
-                values.put("label", labelInput.getText.toString)
-                values.put(
-                  "frequency",
-                  Long.box(findView(TR.frequency).getText.toString.MHz.Hz))
-                values.put("pl_tone", findView(TR.pl_tone).getSelectedItem.toString.toDouble)
-                values.put("mode", findView(TR.mode).getSelectedItem.toString)
+          .setPositiveButton(R.string.okay, null)
+          .show()
 
-                val db = new MemoryEntryHelper(MainActivity.this).getWritableDatabase
-                val id = db.insert("memory_entries", null, values)
+        // Override the button's onClick so that we can validate.
+        labelDialog
+          .getButton(DialogInterface.BUTTON_POSITIVE)
+          .setOnClickListener(
+            new View.OnClickListener {
+              def onClick(v: View) {
+                if (labelInput.getText.toString.isEmpty) {
+                  Toast.makeText(
+                    MainActivity.this,
+                    getString(R.string.text_field_unempty),
+                    Toast.LENGTH_SHORT).show()
+                } else {
+                  val values = new ContentValues()
+                  values.put("label", labelInput.getText.toString)
+                  values.put(
+                    "frequency",
+                    Long.box(findView(TR.frequency).getText.toString.MHz.Hz))
+                  values.put("pl_tone", findView(TR.pl_tone).getSelectedItem.toString.toDouble)
+                  values.put("mode", findView(TR.mode).getSelectedItem.toString)
 
-                val memoryCursor = db
-                  .query(
-                    "memory_entries",
-                    null,
-                    "_id = ?",
-                    Array(id.toString),
-                    null,
-                    null,
-                    null)
-                  .tap(_.moveToFirst())
+                  val db = new MemoryEntryHelper(MainActivity.this).getWritableDatabase
+                  val id = db.insert("memory_entries", null, values)
 
-                val adapter = findView(TR.memory_recall)
-                  .getAdapter
-                  .asInstanceOf[ArrayAdapter[MemoryEntry]]
-                adapter.add(MemoryEntry.fromCursor(memoryCursor))
-                runOnUiThread {
-                  adapter.notifyDataSetChanged()
+                  val memoryCursor = db
+                    .query(
+                      "memory_entries",
+                      null,
+                      "_id = ?",
+                      Array(id.toString),
+                      null,
+                      null,
+                      null)
+                    .tap(_.moveToFirst())
+
+                  val adapter = findView(TR.memory_recall)
+                    .getAdapter
+                    .asInstanceOf[ArrayAdapter[MemoryEntry]]
+                  adapter.add(MemoryEntry.fromCursor(memoryCursor))
+                  runOnUiThread {
+                    adapter.notifyDataSetChanged()
                 }
-
                 Toast.makeText(
                   MainActivity.this,
                   getString(R.string.memory_saved),
                   Toast.LENGTH_SHORT).show()
+
+                  labelDialog.dismiss()
+                }
               }
-            }).show()
+            })
       }
       case R.id.about => {
         val intent = new Intent(this, classOf[AboutActivity])
