@@ -23,7 +23,7 @@ case class MemoryEntry(
   val plTone: Option[Float],
   val shift: Option[String],
   val offset: Option[Float]) {
-  override val toString = s"$label (${frequency.Hz.MHz} MHz)"
+  override val toString = s"$label (${frequency.toLong.Hz.MHz} MHz)"
 }
 
 object MemoryEntry {

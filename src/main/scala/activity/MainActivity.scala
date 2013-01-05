@@ -32,6 +32,7 @@ import _root_.android.widget.{ArrayAdapter, EditText, TextView, Toast, Spinner}
 import com.edgesysdesign.simpleradio.devel.Devel
 import com.edgesysdesign.simpleradio.Implicits._
 import com.edgesysdesign.frequency.FrequencyImplicits._
+import com.edgesysdesign.frequency.HamFrequency
 
 import scala.language.reflectiveCalls
 
@@ -47,7 +48,7 @@ class MainActivity extends Activity with TypedActivity {
 
     val gd = new GestureDetector(this, new FrequencyFlingDetector)
     val frequency = findView(TR.frequency)
-    frequency.setText("145.170".MHz)
+    frequency.setText(HamFrequency("145.170".MHz))
 /*    frequency.setOnTouchListener(new OnTouchListener {
       override def onTouch(view: View, event: MotionEvent): Boolean = {
         gd.onTouchEvent(event)
@@ -103,7 +104,7 @@ class MainActivity extends Activity with TypedActivity {
         .ofFloat(frequency, "rotation", 0f, 360f)
         .setDuration(1000)
         .start()
-      frequency.setText(frequency.getText.toString.MHz + 50.kHz)
+      frequency.setText(HamFrequency(frequency.getText.toString.MHz + 50.kHz))
       true
     }
   }
@@ -149,7 +150,7 @@ class MainActivity extends Activity with TypedActivity {
                   values.put("label", labelInput.getText.toString)
                   values.put(
                     "frequency",
-                    Long.box(findView(TR.frequency).getText.toString.MHz.Hz))
+                    Long.box(HamFrequency(findView(TR.frequency).getText.toString.MHz).Hz.toLong))
                   values.put("pl_tone", findView(TR.pl_tone).getSelectedItem.toString.toDouble)
                   values.put("mode", findView(TR.mode).getSelectedItem.toString)
 
