@@ -9,7 +9,7 @@ object General {
     name := "SimpleRadio",
     version := "0.1",
     versionCode := 0,
-    scalaVersion := "2.10.0-RC3",
+    scalaVersion := "2.10.0",
     platformName in Android := "android-14",
      resolvers += (
       "Edge System Design Repository" at "http://jvmrepo.edgesysdesign.com/"
