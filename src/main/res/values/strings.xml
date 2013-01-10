@@ -21,6 +21,7 @@
     <string name="memory_query">What should this memory entry be called?</string>
     <string name="memory_name_placeholder">My local repeater...</string>
     <string name="memory_saved">The memory (hopefully) saved correctly.</string>
+    <string name="switched_to_memory">Switched to memory \'%s\'.</string>
 
     <!-- Legal -->
     <string name="copyright">

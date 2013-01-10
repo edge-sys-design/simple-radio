@@ -27,7 +27,8 @@ import _root_.android.view.{Menu, MenuItem, View}
 import _root_.android.view.{GestureDetector, MotionEvent, View}
 import _root_.android.view.GestureDetector.{SimpleOnGestureListener, OnDoubleTapListener}
 import _root_.android.view.View.OnTouchListener
-import _root_.android.widget.{ArrayAdapter, EditText, TextView, Toast, Spinner}
+import _root_.android.widget.{AdapterView, ArrayAdapter, EditText, TextView, Toast, Spinner}
+import _root_.android.widget.AdapterView.OnItemClickListener
 
 import com.edgesysdesign.simpleradio.devel.Devel
 import com.edgesysdesign.simpleradio.Implicits._
@@ -46,25 +47,17 @@ class MainActivity extends Activity with TypedActivity {
     setContentView(R.layout.receive)
     val db = new MemoryEntryHelper(this).getWritableDatabase
 
-    val gd = new GestureDetector(this, new FrequencyFlingDetector)
     val frequency = findView(TR.frequency)
     frequency.setText(HamFrequency("145.170".MHz))
-/*    frequency.setOnTouchListener(new OnTouchListener {
-      override def onTouch(view: View, event: MotionEvent): Boolean = {
-        gd.onTouchEvent(event)
-        true
-      }
-    })
-*/
 
-    val plToneSpinner = findView(TR.pl_tone)
+    val plTonesSpinner = findView(TR.pl_tone)
     val plTonesAdapter = ArrayAdapter.createFromResource(
       this,
       R.array.pl_tones,
       android.R.layout.simple_spinner_item)
     plTonesAdapter.setDropDownViewResource(
       android.R.layout.simple_spinner_dropdown_item)
-    plToneSpinner.setAdapter(plTonesAdapter)
+    plTonesSpinner.setAdapter(plTonesAdapter)
 
     val modesSpinner = findView(TR.mode)
     val modesAdapter = ArrayAdapter.createFromResource(
@@ -90,22 +83,37 @@ class MainActivity extends Activity with TypedActivity {
       android.R.layout.simple_list_item_1,
       memories)
 
-    findView(TR.memory_recall).setAdapter(memoriesAdapter)
+    findView(TR.memory_recall).tap { v =>
+      v.setAdapter(memoriesAdapter)
+      v.setOnItemClickListener(new OnItemClickListener {
+        def onItemClick(
+          parent: AdapterView[_],
+          view: View,
+          position: Int,
+          id: Long) {
+          val entry = parent.getItemAtPosition(position).asInstanceOf[MemoryEntry]
+
+          frequency.setText(entry.frequency.toLong.Hz.MHz)
+          modesSpinner.setSelection(modesAdapter.getPosition(entry.mode))
+
+          entry.plTone match {
+            case Some(plTone) =>
+              plTonesSpinner.setSelection(plTonesAdapter.getPosition(plTone.toString))
+            case _ => // TODO: Set it to 'Off' or similar.
+          }
+
+          // TODO: Add shift/offset, once we save those.
+
+          Toast.makeText(
+            MainActivity.this,
+            getString(R.string.switched_to_memory).format(entry.label),
+            Toast.LENGTH_SHORT).show()
+        }
+      })
+    }
 
     if (res.getBoolean(R.bool.development_build) && Build.PRODUCT != "sdk") {
       Devel.checkForUpdates(this)
-    }
-  }
-
-  class FrequencyFlingDetector extends SimpleOnGestureListener with OnDoubleTapListener {
-    override def onDoubleTap(event: MotionEvent): Boolean = {
-      val frequency = findView(TR.frequency)
-      ObjectAnimator
-        .ofFloat(frequency, "rotation", 0f, 360f)
-        .setDuration(1000)
-        .start()
-      frequency.setText(HamFrequency(frequency.getText.toString.MHz + 50.kHz))
-      true
     }
   }
 
