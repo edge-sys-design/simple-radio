@@ -3,8 +3,12 @@ package com.edgesysdesign.simpleradio
 import _root_.android.content.{ContentValues, Context}
 import _root_.android.database.Cursor
 import _root_.android.database.sqlite.{SQLiteDatabase, SQLiteOpenHelper}
+import _root_.android.view.{LayoutInflater, View, ViewGroup}
+import _root_.android.widget.{BaseAdapter, LinearLayout, TextView}
 
 import com.edgesysdesign.frequency.FrequencyImplicits._
+
+import scala.collection.mutable.ArrayBuffer
 
 /** A memory entry that can quickly switch the radio to predefined settings.
   *
@@ -81,5 +85,28 @@ class MemoryEntryHelper(context: Context)
         */
       }
     }
+  }
+}
+
+class MemoryEntryAdapter(val memories: ArrayBuffer[MemoryEntry], context: Context)
+  extends BaseAdapter {
+  def getCount = memories.length
+  def getItem(position: Int) = memories(position)
+  def getItemId(position: Int) = memories(position).id
+  def getView(position: Int, convertView: View, parent: ViewGroup): View = {
+
+    val memory = getItem(position)
+
+    val layout = LayoutInflater.from(context)
+      .inflate(R.layout.memory_entry, parent, false)
+      .asInstanceOf[LinearLayout]
+
+    // TODO: Find out how to treat this as typed instead of casting to get rid
+    // of most of this ugliness.
+    layout
+      .findViewById(R.id.memory_frequency)
+      .asInstanceOf[TextView]
+      .setText(memory.frequency.toLong.Hz.MHz)
+    layout
   }
 }

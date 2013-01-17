@@ -27,7 +27,8 @@ import _root_.android.view.{Menu, MenuItem, View}
 import _root_.android.view.{GestureDetector, MotionEvent, View}
 import _root_.android.view.GestureDetector.{SimpleOnGestureListener, OnDoubleTapListener}
 import _root_.android.view.View.OnTouchListener
-import _root_.android.widget.{AdapterView, ArrayAdapter, EditText, TextView, Toast, Spinner}
+import _root_.android.widget.{AdapterView, ArrayAdapter, BaseAdapter, EditText, TextView, Toast}
+import _root_.android.widget.{Spinner}
 import _root_.android.widget.AdapterView.OnItemClickListener
 
 import com.edgesysdesign.simpleradio.devel.Devel
@@ -35,11 +36,11 @@ import com.edgesysdesign.simpleradio.Implicits._
 import com.edgesysdesign.frequency.FrequencyImplicits._
 import com.edgesysdesign.frequency.HamFrequency
 
+import scala.collection.mutable.ArrayBuffer
 import scala.language.reflectiveCalls
 
 class MainActivity extends Activity with TypedActivity {
-  // TODO: Scala-ify this.
-  val memories = new java.util.ArrayList[MemoryEntry]
+  val memories = new ArrayBuffer[MemoryEntry]
 
   override def onCreate(bundle: Bundle) {
     super.onCreate(bundle)
@@ -74,14 +75,13 @@ class MainActivity extends Activity with TypedActivity {
       .query("memory_entries", null, null, null, null, null, null)
       .tap(_.moveToFirst())
     for (i <- 0 to memoryCursor.getCount() - 1) {
-      memories.add(MemoryEntry.fromCursor(memoryCursor))
+      memories.append(MemoryEntry.fromCursor(memoryCursor))
       memoryCursor.moveToNext()
     }
 
-    val memoriesAdapter = new ArrayAdapter(
-      this,
-      android.R.layout.simple_list_item_1,
-      memories)
+    val memoriesAdapter = new MemoryEntryAdapter(
+      memories,
+      this)
 
     findView(TR.memory_recall).tap { v =>
       v.setAdapter(memoriesAdapter)
@@ -178,8 +178,12 @@ class MainActivity extends Activity with TypedActivity {
 
                   val adapter = findView(TR.memory_recall)
                     .getAdapter
-                    .asInstanceOf[ArrayAdapter[MemoryEntry]]
-                  adapter.add(MemoryEntry.fromCursor(memoryCursor))
+                    .asInstanceOf[MemoryEntryAdapter]
+
+                  adapter
+                    .memories
+                    .append(MemoryEntry.fromCursor(memoryCursor))
+
                   runOnUiThread {
                     adapter.notifyDataSetChanged()
                 }
