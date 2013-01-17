@@ -3,16 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
-  <TextView
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      android:id="@+id/memory_frequency"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textAppearance="?android:attr/textAppearanceListItemSmall"
-      android:gravity="center_vertical"
-      android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-      android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-      android:minHeight="?android:attr/listPreferredItemHeightSmall" />
+    <TextView
+        android:id="@+id/memory_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItem" />
+
+
+    <TextView
+        android:id="@+id/memory_frequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
 </LinearLayout>

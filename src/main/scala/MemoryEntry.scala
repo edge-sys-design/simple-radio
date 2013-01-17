@@ -107,6 +107,12 @@ class MemoryEntryAdapter(val memories: ArrayBuffer[MemoryEntry], context: Contex
       .findViewById(R.id.memory_frequency)
       .asInstanceOf[TextView]
       .setText(memory.frequency.toLong.Hz.MHz)
+
+    layout
+      .findViewById(R.id.memory_label)
+      .asInstanceOf[TextView]
+      .setText(memory.label)
+
     layout
   }
 }
