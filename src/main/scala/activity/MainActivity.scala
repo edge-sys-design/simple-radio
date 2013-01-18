@@ -93,7 +93,7 @@ class MainActivity extends Activity with TypedActivity {
           id: Long) {
           val entry = parent.getItemAtPosition(position).asInstanceOf[MemoryEntry]
 
-          frequency.setText(entry.frequency.toLong.Hz.MHz)
+          frequency.setText(entry.formattedFrequency)
           modesSpinner.setSelection(modesAdapter.getPosition(entry.mode))
 
           entry.plTone match {

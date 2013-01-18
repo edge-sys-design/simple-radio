@@ -27,7 +27,8 @@ case class MemoryEntry(
   val plTone: Option[Float],
   val shift: Option[String],
   val offset: Option[Float]) {
-  override val toString = s"$label (${frequency.toLong.Hz.MHz} MHz)"
+  override lazy val toString = s"$label (${frequency.toLong.Hz.MHz} MHz)"
+  lazy val formattedFrequency = frequency.toLong.Hz.MHz
 }
 
 object MemoryEntry {
@@ -88,8 +89,11 @@ class MemoryEntryHelper(context: Context)
   }
 }
 
-class MemoryEntryAdapter(val memories: ArrayBuffer[MemoryEntry], context: Context)
+class MemoryEntryAdapter(
+  val memories: ArrayBuffer[MemoryEntry],
+  context: Context)
   extends BaseAdapter {
+
   def getCount = memories.length
   def getItem(position: Int) = memories(position)
   def getItemId(position: Int) = memories(position).id
@@ -106,7 +110,7 @@ class MemoryEntryAdapter(val memories: ArrayBuffer[MemoryEntry], context: Contex
     layout
       .findViewById(R.id.memory_frequency)
       .asInstanceOf[TextView]
-      .setText(memory.frequency.toLong.Hz.MHz)
+      .setText(memory.formattedFrequency + " MHz")
 
     layout
       .findViewById(R.id.memory_label)
@@ -115,4 +119,5 @@ class MemoryEntryAdapter(val memories: ArrayBuffer[MemoryEntry], context: Contex
 
     layout
   }
+
 }
