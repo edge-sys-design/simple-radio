@@ -69,7 +69,7 @@ class MainActivity extends Activity with TypedActivity {
       android.R.layout.simple_spinner_dropdown_item)
     modesSpinner.setAdapter(modesAdapter)
 
-    findView(TR.offset).setText("-600 KHz")
+    findView(TR.offset).setText("-600")
 
     val memoryCursor = db
       .query("memory_entries", null, null, null, null, null, null)
@@ -154,6 +154,8 @@ class MainActivity extends Activity with TypedActivity {
                     getString(R.string.text_field_unempty),
                     Toast.LENGTH_SHORT).show()
                 } else {
+                  val frequency = findView(TR.frequency).getText.toString.MHz
+                  val offset = findView(TR.offset).getText.toString.MHz
                   val plValue = findView(TR.pl_tone).getSelectedItem.toString match {
                     case "No PL" => null
                     case pl => Double.box(pl.toDouble)
@@ -166,6 +168,7 @@ class MainActivity extends Activity with TypedActivity {
                     Long.box(HamFrequency(findView(TR.frequency).getText.toString.MHz).Hz.toLong))
                   values.put("pl_tone", plValue)
                   values.put("mode", findView(TR.mode).getSelectedItem.toString)
+                  values.put("offset", Long.box((frequency + offset).Hz.toLong))
 
                   val db = new MemoryEntryHelper(MainActivity.this).getWritableDatabase
                   val id = db.insert("memory_entries", null, values)

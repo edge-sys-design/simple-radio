@@ -25,7 +25,6 @@ case class MemoryEntry(
   val frequency: Long,
   val mode: String,
   val plTone: Option[Float],
-  val shift: Option[String],
   val offset: Option[Float]) {
   override lazy val toString = s"$label (${frequency.toLong.Hz.MHz} MHz)"
   lazy val formattedFrequency = frequency.toLong.Hz.MHz
@@ -41,7 +40,6 @@ object MemoryEntry {
     cursor.getLong(2), // frequency
     cursor.getString(3), // mode
     Option(cursor.getFloat(4)),  // plTone
-    Option(cursor.getString(5)), // shift
     Option(cursor.getFloat(6))) // offset
 }
 
@@ -60,7 +58,6 @@ class MemoryEntryHelper(context: Context)
       |  frequency integer not null,
       |  mode varchar(10) not null,
       |  pl_tone float,
-      |  shift varchar(1),
       |  offset float);
       |""".stripMargin)
   }
