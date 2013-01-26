@@ -1,7 +1,7 @@
 import java.io._
 import java.nio._
 
-object IQEncoder {
+object IQModulator {
   val sine = for (i <- 1 to 1024) yield 65536 * math.sin(i * (math.Pi / 1024)) toInt
   val cosine = for (i <- 1 to 1024) yield 65536 * math.cos(i * (math.Pi / 1024)) toInt
   val sampleRate = 16E3
