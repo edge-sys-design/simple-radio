@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string-array name="pl_tones">
+    <item>No PL</item>
     <item>67.0</item>
     <item>69.3</item>
     <item>71.9</item>

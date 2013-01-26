@@ -154,12 +154,17 @@ class MainActivity extends Activity with TypedActivity {
                     getString(R.string.text_field_unempty),
                     Toast.LENGTH_SHORT).show()
                 } else {
+                  val plValue = findView(TR.pl_tone).getSelectedItem.toString match {
+                    case "No PL" => null
+                    case pl => Double.box(pl.toDouble)
+                  }
+
                   val values = new ContentValues()
                   values.put("label", labelInput.getText.toString)
                   values.put(
                     "frequency",
                     Long.box(HamFrequency(findView(TR.frequency).getText.toString.MHz).Hz.toLong))
-                  values.put("pl_tone", findView(TR.pl_tone).getSelectedItem.toString.toDouble)
+                  values.put("pl_tone", plValue)
                   values.put("mode", findView(TR.mode).getSelectedItem.toString)
 
                   val db = new MemoryEntryHelper(MainActivity.this).getWritableDatabase
