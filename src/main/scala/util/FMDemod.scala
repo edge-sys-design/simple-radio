@@ -1,18 +1,14 @@
+package com.edgesysdesign.simpleradio.util
 import java.io._
 import java.nio._
 
-object IQModulator {
-  val sine = for (i <- 1 to 1024) yield 65536 * math.sin(i * (math.Pi / 1024)) toInt
-  val cosine = for (i <- 1 to 1024) yield 65536 * math.cos(i * (math.Pi / 1024)) toInt
-  val sampleRate = 16E3
+object FMDemod {
   val bytesPerSample = 2
-  val fCarrier = 750
-  val move = (2 * sine.length * fCarrier) / sampleRate toInt
 
   def main(args: Array[String]) {
     require(
       args.length == 2,
-      "Usage: scala IQEncoder inputfile outputfile")
+      "Usage: scala FMDemod inputfile outputfile")
 
     val input = new File(args(0))
     val output = new File(args(1))
@@ -21,37 +17,37 @@ object IQModulator {
 
     val inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(input)))
     val outputStream = new FileOutputStream(output).getChannel()
-    var position = 1
-    var sign = 1
+
+    case class Sample(var samI: Short, var samQ: Short)
+    val oldSample = Sample(0, 0)
+    val newSample = Sample(0, 0)
 
     try {
       Iterator
-        .continually(inputStream.readShort())
-        .foreach { s =>
+        .continually(inputStream.readShort(), inputStream.readShort())
+        .foreach { sam =>
           val sample = ByteBuffer
             .allocate(4)
             .order(ByteOrder.BIG_ENDIAN)
-            .putShort(s)
+            .putShort(sam._1)
+            .putShort(sam._2)
             .order(ByteOrder.LITTLE_ENDIAN)
-            .getShort(0)
-          val samI = (sample * sign * (sine(position) / 65535.0)).toShort
-          val samQ = (sample * sign * (cosine(position) / 65535.0)).toShort
+
+          oldSample.samI = newSample.samI
+          oldSample.samQ = newSample.samQ
+
+          newSample.samI = sample.getShort(0)
+          newSample.samQ = sample.getShort(2)
+
+          val result = (((newSample.samI * oldSample.samQ) - (newSample.samQ * oldSample.samI)) / 65535.0).toShort
 
           val samples = ByteBuffer
-            .allocate(4)
+            .allocate(2)
             .order(ByteOrder.LITTLE_ENDIAN)
 
           samples
             .asShortBuffer
-            .put(samI)
-            .put(samQ)
-
-          position += move
-
-          if (position >= sine.size) {
-            position = position - sine.size
-            sign = -sign
-          }
+            .put(result)
 
           outputStream.write(samples)
         }

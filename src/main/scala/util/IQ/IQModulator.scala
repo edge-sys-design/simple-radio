@@ -1,13 +1,12 @@
+package com.edgesysdesign.simpleradio.util
 import java.io._
 import java.nio._
 
-object IQDemodulator {
-  val sine = for (i <- 1 to 1024) yield 65536 * math.sin(i * (math.Pi / 1024)) toInt
-  val cosine = for (i <- 1 to 1024) yield 65536 * math.cos(i * (math.Pi / 1024)) toInt
+object IQModulator {
   val sampleRate = 16E3
   val bytesPerSample = 2
-  val fBandwidth = 2000
-  val move = (2 * sine.length * fBandwidth) / sampleRate toInt
+  val fCarrier = 750
+  val move = ((2 * sine.length * fCarrier) / sampleRate).toInt
 
   def main(args: Array[String]) {
     require(
@@ -26,30 +25,25 @@ object IQDemodulator {
 
     try {
       Iterator
-        .continually(inputStream.readShort(), inputStream.readShort())
-        .foreach { sam =>
-
+        .continually(inputStream.readShort())
+        .foreach { s =>
           val sample = ByteBuffer
             .allocate(4)
             .order(ByteOrder.BIG_ENDIAN)
-            .putShort(sam._1)
-            .putShort(sam._2)
+            .putShort(s)
             .order(ByteOrder.LITTLE_ENDIAN)
-
-          val demodSamI = (sample.getShort(0) * sign * (sine(position) / 65535.0)).toShort
-          val demodSamQ = (sample.getShort(2) * sign * (cosine(position) / 65535.0)).toShort
-
-          //println("%d - %d = %d".format(demodSamI, demodSamQ, (demodSamI - demodSamQ).toShort))
+            .getShort(0)
+          val samI = (sample * sign * (sine(position) / 65535.0)).toShort
+          val samQ = (sample * sign * (cosine(position) / 65535.0)).toShort
 
           val samples = ByteBuffer
-            .allocate(2)
+            .allocate(4)
             .order(ByteOrder.LITTLE_ENDIAN)
 
           samples
             .asShortBuffer
-            .put((demodSamI - demodSamQ).toShort)
-
-          //println("%d".format(sample2.getShort(0), sample2.getShort(2), samples.getShort(0)))
+            .put(samI)
+            .put(samQ)
 
           position += move
 

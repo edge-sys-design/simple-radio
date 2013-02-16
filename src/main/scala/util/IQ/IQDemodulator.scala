@@ -1,13 +1,17 @@
+package com.edgesysdesign.simpleradio.util
 import java.io._
 import java.nio._
 
-object FMDemod {
+object IQDemodulator {
+  val sampleRate = 16E3
   val bytesPerSample = 2
+  val fBandwidth = 2000
+  val move = ((2 * sine.length * fBandwidth) / sampleRate).toInt
 
   def main(args: Array[String]) {
     require(
       args.length == 2,
-      "Usage: scala FMDemod inputfile outputfile")
+      "Usage: scala IQEncoder inputfile outputfile")
 
     val input = new File(args(0))
     val output = new File(args(1))
@@ -16,15 +20,14 @@ object FMDemod {
 
     val inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(input)))
     val outputStream = new FileOutputStream(output).getChannel()
-
-    case class Sample(var samI: Short, var samQ: Short)
-    val oldSample = Sample(0, 0)
-    val newSample = Sample(0, 0)
+    var position = 1
+    var sign = 1
 
     try {
       Iterator
         .continually(inputStream.readShort(), inputStream.readShort())
         .foreach { sam =>
+
           val sample = ByteBuffer
             .allocate(4)
             .order(ByteOrder.BIG_ENDIAN)
@@ -32,13 +35,10 @@ object FMDemod {
             .putShort(sam._2)
             .order(ByteOrder.LITTLE_ENDIAN)
 
-          oldSample.samI = newSample.samI
-          oldSample.samQ = newSample.samQ
+          val demodSamI = (sample.getShort(0) * sign * (sine(position) / 65535.0)).toShort
+          val demodSamQ = (sample.getShort(2) * sign * (cosine(position) / 65535.0)).toShort
 
-          newSample.samI = sample.getShort(0)
-          newSample.samQ = sample.getShort(2)
-
-          val result = (((newSample.samI * oldSample.samQ) - (newSample.samQ * oldSample.samI)) / 65535.0).toShort
+          //println("%d - %d = %d".format(demodSamI, demodSamQ, (demodSamI - demodSamQ).toShort))
 
           val samples = ByteBuffer
             .allocate(2)
@@ -46,7 +46,16 @@ object FMDemod {
 
           samples
             .asShortBuffer
-            .put(result)
+            .put((demodSamI - demodSamQ).toShort)
+
+          //println("%d".format(sample2.getShort(0), sample2.getShort(2), samples.getShort(0)))
+
+          position += move
+
+          if (position >= sine.size) {
+            position = position - sine.size
+            sign = -sign
+          }
 
           outputStream.write(samples)
         }

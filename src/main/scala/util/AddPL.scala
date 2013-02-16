@@ -1,9 +1,8 @@
+package com.edgesysdesign.simpleradio.util
 import java.io._
 import java.nio._
 
 object AddPL {
-  val sine = for (i <- 1 to 1024) yield 32768 * math.sin(i * (math.Pi / 1024)) toInt
-  val cosine = for (i <- 1 to 1024) yield 32768 * math.cos(i * (math.Pi / 1024)) toInt
   val sampleRate = 44100
 
   def main(args: Array[String]) {
@@ -24,7 +23,7 @@ object AddPL {
     val plTone = 131.8
     val amplitude = 0.2
 
-    val move = (2 * sine.length * plTone) / sampleRate toInt
+    val move = ((2 * sine.length * plTone) / sampleRate).toInt
 
     try {
       Iterator
