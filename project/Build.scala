@@ -16,7 +16,8 @@ object General {
     ),
     libraryDependencies ++= Seq(
       "com.edgesysdesign" %% "frequency" % "master",
-      "org.scalatest" % "scalatest_2.10.0-RC3" % "1.8-B1" % "test"
+      "org.scalatest" % "scalatest_2.10.0-RC3" % "1.8-B1" % "test",
+       "org.scaloid" % "scaloid" % "1.1_8_2.10"
     ),
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
     scalacOptions ++= Seq(
