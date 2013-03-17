@@ -20,11 +20,31 @@ package com.edgesysdesign.simpleradio
 
 import org.scaloid.common._
 
+import _root_.android.animation.ObjectAnimator
+import _root_.android.view.{GestureDetector, MotionEvent}
+import _root_.android.view.GestureDetector.SimpleOnGestureListener
+
 class AboutActivity extends SActivity {
+
+  lazy val gd = new GestureDetector(this, new SimpleOnGestureListener {
+    override def onDoubleTap(event: MotionEvent): Boolean = {
+      ObjectAnimator
+        .ofFloat(launcherIcon, "rotation", 0f, 360f)
+        .setDuration(1000)
+        .start()
+      true
+    }
+  })
+
+  lazy val launcherIcon = new SImageView().imageResource(R.drawable.launcher_icon)
+
   onCreate {
     contentView {
       new SVerticalLayout {
-        SImageView().imageResource(R.drawable.launcher_icon)
+        this += launcherIcon.onTouch((_, e) => {
+          gd.onTouchEvent(e)
+          true
+        })
         STextView(R.string.version) marginBottom 20.dip
         STextView(R.string.copyright) marginBottom 20.dip
         STextView(R.string.disclaimer) marginBottom 20.dip
