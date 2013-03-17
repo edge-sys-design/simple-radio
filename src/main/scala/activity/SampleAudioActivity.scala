@@ -1,4 +1,4 @@
-/** Copyright (C) 2012 Edge System Design, LLC.  All rights reserved.
+/** Copyright (C) 2013 Edge System Design, LLC.  All rights reserved.
   *
   * This program is free software; you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,25 @@
 
 package com.edgesysdesign.simpleradio
 
+import org.scaloid.common._
+
 import _root_.android.app.Activity
 import _root_.android.media.{AudioFormat, AudioManager, AudioTrack}
-import _root_.android.os.Bundle
 
 import scala.concurrent.future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SampleAudioActivity extends Activity with TypedActivity {
-  override def onCreate(bundle: Bundle) {
-    super.onCreate(bundle)
-    setContentView(R.layout.about)
+class SampleAudioActivity extends SActivity {
+  onCreate {
+    contentView {
+      new SVerticalLayout {
+        SImageView().imageResource(R.drawable.launcher_icon)
+        STextView(R.string.version) marginBottom 20.dip
+        STextView(R.string.copyright) marginBottom 20.dip
+        STextView(R.string.disclaimer) marginBottom 20.dip
+        STextView(R.string.get_involved)
+      }.padding(16.dip)
+    }
 
     val res = getResources()
 
@@ -51,7 +59,6 @@ class SampleAudioActivity extends Activity with TypedActivity {
         AudioTrack.MODE_STREAM)
 
       audioTrack.play()
-
 
       Iterator
         .continually(sample.read(buffer, 0, minBufferSize))

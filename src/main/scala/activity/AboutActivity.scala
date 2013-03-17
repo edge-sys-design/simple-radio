@@ -1,4 +1,4 @@
-/** Copyright (C) 2012 Edge System Design, LLC.  All rights reserved.
+/** Copyright (C) 2013 Edge System Design, LLC.  All rights reserved.
   *
   * This program is free software; you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
@@ -20,39 +20,16 @@ package com.edgesysdesign.simpleradio
 
 import org.scaloid.common._
 
-import _root_.android.animation.ObjectAnimator
-import _root_.android.content.{Context, Intent}
-import _root_.android.net.Uri
-import _root_.android.os.Bundle
-import _root_.android.view.{GestureDetector, MotionEvent, View}
-import _root_.android.view.GestureDetector.{SimpleOnGestureListener, OnDoubleTapListener}
-import _root_.android.view.View.OnTouchListener
-import _root_.android.widget.ImageView
-
 class AboutActivity extends SActivity {
-  override def onCreate(bundle: Bundle) {
-    super.onCreate(bundle)
-    setContentView(R.layout.about)
-
-    val gd = new GestureDetector(this, new MyDoubleTapDetector)
-
-    val view = find[ImageView](R.id.about_launcher_icon)
-    view.setOnTouchListener(new OnTouchListener {
-      override def onTouch(view: View, event: MotionEvent): Boolean = {
-        gd.onTouchEvent(event)
-        true
-      }
-    })
-  }
-
-  class MyDoubleTapDetector extends SimpleOnGestureListener with OnDoubleTapListener {
-    override def onDoubleTap(event: MotionEvent): Boolean = {
-      val view = find[ImageView](R.id.about_launcher_icon)
-      ObjectAnimator
-        .ofFloat(view, "rotation", 0f, 360f)
-        .setDuration(1000)
-        .start()
-      true
+  onCreate {
+    contentView {
+      new SVerticalLayout {
+        SImageView().imageResource(R.drawable.launcher_icon)
+        STextView(R.string.version) marginBottom 20.dip
+        STextView(R.string.copyright) marginBottom 20.dip
+        STextView(R.string.disclaimer) marginBottom 20.dip
+        STextView(R.string.get_involved)
+      }.padding(16.dip)
     }
   }
 }
